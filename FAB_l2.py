@@ -32,15 +32,21 @@ def projection_l2_hyperplane(t2, w2, b2):
     u = torch.arange(0, w.shape[0]).unsqueeze(1)
     
     r = torch.max(t/w, (t-1)/w)
-    r = torch.min(r, 1e20*torch.ones(r.shape).cuda())
+    r = torch.min(r, 1e12*torch.ones(r.shape).cuda())
+    r = torch.max(r, -1e12*torch.ones(r.shape).cuda())
+    r[w.abs() < 1e-8] = 1e12
+    r[r == -1e12] = -r[r == -1e12]
     rs, indr = torch.sort(r, dim=1)
     rs2 = torch.cat((rs[:,1:], torch.zeros(rs.shape[0],1)),1)
+    rs[rs == 1e12] = 0
+    rs2[rs2 == 1e12] = 0
     
     w3 = w**2
     w3s = w3[u, indr]
     w5 = w3s.sum(dim=1, keepdim=True)
     ws = w5 - torch.cumsum(w3s, dim=1)
     d = -(r*w).clone()
+    d = d*(w.abs() > 1e-8).float()
     s = torch.cat(((-w5.squeeze()*rs[:,0]).unsqueeze(1), torch.cumsum((-rs2 + rs)*ws, dim=1) - w5*rs[:,0].unsqueeze(-1)), 1)
     
     c4 = (s[:,0] + c < 0)
@@ -71,15 +77,18 @@ def projection_l2_hyperplane(t2, w2, b2):
     
     if c6.nelement() != 0:
       alpha = c[c6]/w5[c6].squeeze(-1)
-      alpha = torch.min(alpha, 1e20*torch.ones(alpha.shape).cuda())
       d[c6] = -alpha.unsqueeze(-1)*w[c6]
     
     if c2.nelement() != 0:
       alpha = (s[c2, lb] + c[c2])/ws[c2, lb] + rs[c2, lb]
-      alpha = torch.min(alpha, 1e20*torch.ones(alpha.shape).cuda())
+      if torch.sum(ws[c2, lb] == 0) > 0:
+        ind = (ws[c2,lb] == 0).nonzero().squeeze().cpu().numpy()
+        alpha[ind] = 0
       c5 = (alpha.unsqueeze(-1) > r[c2]).float()
       d[c2] = d[c2]*c5 - alpha.unsqueeze(-1)*w[c2]*(1 - c5)
 
+    d = d*(w.abs() > 1e-8).float()
+    
     return d
   
 def linear_approximation_search(model, clean_im, clean_im_l, adv, niter, sess):
