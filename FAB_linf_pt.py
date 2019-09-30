@@ -1,4 +1,4 @@
-''' This is a preliminary implemnetation of FAB-attack in PyTorch.
+''' This is a preliminary implementation of FAB-attack in PyTorch.
     It is only wrt Linf.
 '''        
 
@@ -29,24 +29,24 @@ def get_diff_logits_grads_batch(model, im3, la):
   return df, dg
 
 def compute_jacobian(inputs, output):
-	assert inputs.requires_grad
-
-	num_classes = output.size()[1]
-
-	jacobian = torch.zeros(num_classes, *inputs.size())
-	grad_output = torch.zeros(*output.size())
-	if inputs.is_cuda:
-		grad_output = grad_output.cuda()
-		jacobian = jacobian.cuda()
-
-	for i in range(num_classes):
-		zero_gradients(inputs)
-		grad_output.zero_()
-		grad_output[:, i] = 1
-		output.backward(grad_output, retain_graph=True)
-		jacobian[i] = inputs.grad.data
-
-	return torch.transpose(jacobian, dim0=0, dim1=1)
+  assert inputs.requires_grad
+  
+  num_classes = output.size()[1]
+  
+  jacobian = torch.zeros(num_classes, *inputs.size())
+  grad_output = torch.zeros(*output.size())
+  if inputs.is_cuda:
+  	grad_output = grad_output.cuda()
+  	jacobian = jacobian.cuda()
+  
+  for i in range(num_classes):
+  	zero_gradients(inputs)
+  	grad_output.zero_()
+  	grad_output[:, i] = 1
+  	output.backward(grad_output, retain_graph=True)
+  	jacobian[i] = inputs.grad.data
+  
+  return torch.transpose(jacobian, dim0=0, dim1=1)
     
 def projection_linf(t2, w2, b2):
     t = t2.clone().float()
