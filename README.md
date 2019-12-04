@@ -12,6 +12,10 @@ classification of a clean input applying a perturbation
 with minimal Lp-norm, for p in {1, 2, inf}. It achieves quickly good quality results, does not need the specification of a step size
 and tries to track the desicion boundary.
 
+## News
+
++ An optimized PyTorch implementation of FAB attack is now available [here](https://github.com/BorealisAI/advertorch/blob/master/advertorch/attacks/fast_adaptive_boundary.py) in [Advertorch](https://github.com/BorealisAI/advertorch)!
+
 ## Running the attack
 
 We provide, in the folder `models`, classifiers on MNIST and CIFAR-10, trained with either natural training (*plain*), adversarial training
