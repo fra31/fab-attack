@@ -18,8 +18,10 @@ and tries to track the desicion boundary.
 
 ## Running the attack
 
-We provide, in the folder `models`, classifiers on MNIST and CIFAR-10, trained with either natural training (*plain*), adversarial training
-wrt the L2-norm (*l2-at*) or wrt the Linf-norm (*linf-at*). With
+We provide [here](https://drive.google.com/file/d/1VBYsfON-lo_JQpmaRezSYxmnePmr49FN/view?usp=sharing), in the folder `models`, classifiers on MNIST and CIFAR-10, trained with either natural training (*plain*), adversarial training
+wrt the L2-norm (*l2-at*) or wrt the Linf-norm (*linf-at*). In the folder `datasets`, available at the same link, we provide also the datasets in the format consistent with the scripts.
+
+With
 
 `python test_attack.py --dataset mnist --model plain --bs 1000 --im 1000 --p linf --n_iter 100 --n_restarts 3 --eps 0.3`
 
