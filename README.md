@@ -14,6 +14,8 @@ and tries to track the desicion boundary.
 
 ## News
 
++ The paper is accepted at ICML 2020!
++ FAB attack is included in [AutoAttack](https://github.com/fra31/auto-attack), a new parameter-free protocol to evaluate adversarial robustness!
 + An optimized PyTorch implementation of FAB attack is now available [here](https://github.com/BorealisAI/advertorch/blob/master/advertorch/attacks/fast_adaptive_boundary.py) in [Advertorch](https://github.com/BorealisAI/advertorch)!
 
 ## Running the attack
@@ -37,5 +39,15 @@ performs the Linf attack on the model.
 
 ## Results
 
-FAB-attack achieves the best results in the two challenges at
+FAB-attack achieves top results in the two challenges at
 [https://github.com/yaodongyu/TRADES](https://github.com/yaodongyu/TRADES) and the one at [https://github.com/MadryLab/cifar10_challenge](https://github.com/MadryLab/cifar10_challenge).
+
+## Citations
+```
+@inproceedings{croce2020minimally,
+  author    = {F. Croce and M. Hein},
+  title     = {Minimally distorted Adversarial Examples with a Fast Adaptive Boundary Attack},
+  booktitle = {ICML},
+  year      = {2020}
+}
+```
